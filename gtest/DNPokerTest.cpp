@@ -44,6 +44,10 @@ protected:
 		poker1.poker_value = 1;
 		EXPECT_TRUE(poker1 == poker2);
 	}
+
+	void testFriendName(){
+
+	}
 }; 
 
 TEST_F(DNPokerTest, testConstructor) {
