@@ -125,7 +125,7 @@ void CDNPoker::InitPoker(BYTE minPoker, BYTE maxPoker)
 
 	return;
 }
-
+//洗牌函数
 void CDNPoker::Shuffle(int16 iTimes)
 {
 	static int x = 0;
@@ -144,7 +144,7 @@ void CDNPoker::Shuffle(int16 iTimes)
 			x+=10000;
 
 			iValue = index + rand() % (GetPokerNum() - index);
-
+			//index位置的牌和iValue位置的牌交换
 			median = dn_Poker_[index];
 			dn_Poker_[index] = dn_Poker_[iValue];
 			dn_Poker_[iValue] = median;
