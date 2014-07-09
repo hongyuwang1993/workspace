@@ -45,8 +45,17 @@ protected:
 		EXPECT_TRUE(poker1 == poker2);
 	}
 
-	void testFriendName(){
+	void testFriendlyName(){
+		struct DNPoker poker;
+		poker.poker_color = 2;
+		poker.poker_value = 5;
+		EXPECT_STREQ("Ó£»¨5", poker.FriendlyName().c_str());
 
+		struct DNPoker nullpoker;
+		EXPECT_STREQ("invalid_poker", nullpoker.FriendlyName().c_str());
+
+		poker.poker_color = 6;
+		EXPECT_STREQ("invalid_poker", poker.FriendlyName().c_str());
 	}
 }; 
 
@@ -56,4 +65,8 @@ TEST_F(DNPokerTest, testConstructor) {
 
 TEST_F(DNPokerTest, testEqual) {
 	testEqual();
+}
+
+TEST_F(DNPokerTest, testFriendlyName) {
+	testFriendlyName();
 }
