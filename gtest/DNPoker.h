@@ -88,7 +88,7 @@ public:
 		
 		DN_TYPE_COUNT,	// place holder.
 	};
-
+	 
 	int32 GetPokerNum()
 	{
 		return poker_num_;

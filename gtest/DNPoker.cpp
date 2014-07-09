@@ -58,7 +58,7 @@ bool DNPoker::operator!=( const DNPoker & other ) const
 {
 	return !(*this == other);
 }
-
+ 
 bool DNPoker::IsNullPoker() const
 {
 	return (poker_value==0||poker_color==0);
