@@ -104,8 +104,9 @@ void CDNPoker::InitPoker(BYTE minPoker, BYTE maxPoker)
 	poker_min_value_ = 0;
 	poker_max_value_ = 0;
 
-	assert(minPoker <= maxPoker);
-
+	//assert(minPoker <= maxPoker);
+	if(minPoker > maxPoker)
+		return;
 	int poker_count_color = maxPoker - minPoker + 1;
 	int total_poker_count = DNPOKER_COLOR_COUNT * poker_count_color;
 
@@ -330,9 +331,16 @@ CDNPoker::DN_TYPE CDNPoker::FindCow(DNPoker poker[5], int32 niuPokerIndex[5], in
 					niuPokerIndex[0] = i;
 					niuPokerIndex[1] = j;
 					niuPokerIndex[2] = k;
-					
+					//’“¡ÌÕ‚¡Ω’≈≈∆
+					int m = 0;
+					for (int q = 0; q < 5; q++){
+						if (q != i && q != j && q != k){
+							otherPokerIndex[m++] = q;
+						}
+					}
+
 					// OtherPokerIndex.
-					qsort(niuPokerIndex, 3, sizeof(int32), pokerIndexComparator);
+					/*qsort(niuPokerIndex, 3, sizeof(int32), pokerIndexComparator);
 					if (niuPokerIndex[0] == 2) {
 						otherPokerIndex[0] = 0;
 						otherPokerIndex[1] = 1;
@@ -351,7 +359,7 @@ CDNPoker::DN_TYPE CDNPoker::FindCow(DNPoker poker[5], int32 niuPokerIndex[5], in
 							otherPokerIndex[1] = 0;
 						}
 					}
-
+					*/
 					int32 type = all_poker_sum % 10;
 					if (type == 0) {
 						type = CDNPoker::NIU_NIU;
