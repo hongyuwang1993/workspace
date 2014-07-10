@@ -217,25 +217,17 @@ protected:
 		EXPECT_EQ(1, m);
 	}
 
-	void testDealPokers(){
-		struct DNPoker *pokers[5];
+	void testDNDeal(){
 		CDNPoker cpoker;
-		int test[52];
-		for (int i = 0; i < 52; i++)
-			test[i] = 0;
-		for (int i = 0; i < 5; i++){
-			pokers[i] = (DNPoker*)malloc(5 * sizeof(DNPoker));
-		}
-		cpoker.Shuffle();
-		cpoker.DealPokers(pokers, 5);
-		for (int i = 0; i < 5; i++){
-			for (int j = 0; j < 5; j++){
-				test[(pokers[i][j].poker_color - 1) * 13 + pokers[i][j].poker_value - 1]++;
-			}
-		}
-		for (int i = 0; i < 52; i++){
-			EXPECT_TRUE(test[i] < 2);
-		}
+		struct DNPoker poker[5];
+		cpoker.deal_position_ = -1;
+		EXPECT_FALSE(cpoker.DNDeal(poker));
+		cpoker.deal_position_ = 50;
+		EXPECT_FALSE(cpoker.DNDeal(poker));
+		cpoker.deal_position_ = 0;
+		cpoker.DNDeal(poker);
+		for (int i = 0; i < 5; i++)
+			EXPECT_TRUE(poker[i].poker_color> 0 && poker[i].poker_value > 0);
 	}
 
 	void testFindMaxPoker(){
@@ -550,10 +542,79 @@ protected:
 			EXPECT_EQ(1, test[i]);
 	}
 
+	void testHasCow_CDNPokers(){
+		CDNPoker cpoker;
+		struct DNPokers pokers;
+		struct DNPoker  poker[5];
+		int32 pokerIndex[5] = { 0, 1, 2, 3, 4 };
+		for (int i = 0; i < 5; i++){
+			poker[i].poker_color = i % 4 + 1;
+			poker[i].poker_value = i + 1;
+		}
+		pokers.SetPoker(poker);
+		cpoker.HasCow(pokers, pokerIndex);
+		EXPECT_EQ(pokers.dn_type, cpoker.HasCow(pokers.poker, pokerIndex));
+		for (int i = 0; i < 5; i++){
+			EXPECT_EQ(pokers.niu_poker_index[i], pokerIndex[i]);
+		}
+		EXPECT_EQ(pokers.max_poker, cpoker.FindMaxPoker(pokers.poker));
+	}
+
+	void testFindCow_CDNPokers(){
+		CDNPoker cpoker;
+		struct DNPokers pokers;
+		struct DNPoker  poker[5];
+		int32 niuPokerIndex[5] = { 0, 1, 2, -1, -1 };
+		int32 otherPokerIndex[2] = { 3, 4 };
+		for (int i = 0; i < 5; i++){
+			poker[i].poker_color = i % 4 + 1;
+			poker[i].poker_value = i + 1;
+		}
+		pokers.SetPoker(poker);
+		cpoker.FindCow(pokers, niuPokerIndex, otherPokerIndex);
+		EXPECT_EQ(pokers.dn_type, cpoker.FindCow(pokers.poker, niuPokerIndex, otherPokerIndex));
+		for (int i = 0; i < 5; i++){
+			EXPECT_EQ(pokers.niu_poker_index[i], niuPokerIndex[i]);
+		}
+		EXPECT_EQ(pokers.max_poker, cpoker.FindMaxPoker(pokers.poker));
+	/*	int32 *pniuPokerIndex = NULL;
+		int32 *potherPokerIndex = NULL;
+		
+		cpoker.FindCow(pokers, pniuPokerIndex, potherPokerIndex);
+		for (int i = 0; i < 5; i++){
+			EXPECT_EQ(-1, pniuPokerIndex[i]);
+		}
+		for (int i = 0; i < 2; i++){
+			EXPECT_EQ(-1, potherPokerIndex[i]);
+		}
+		*/
+	}
+
 	void testChangeDNPokerJQK(){
 		CDNPoker cpoker;
 		EXPECT_EQ(10, cpoker.ChangeDNPokerJQK(13));
 		EXPECT_EQ(5, cpoker.ChangeDNPokerJQK(5));
+	}
+
+	void testDealPokers(){
+		struct DNPoker *pokers[5];
+		CDNPoker cpoker;
+		int test[52];
+		for (int i = 0; i < 52; i++)
+			test[i] = 0;
+		for (int i = 0; i < 5; i++){
+			pokers[i] = (DNPoker*)malloc(5 * sizeof(DNPoker));
+		}
+		cpoker.Shuffle();
+		cpoker.DealPokers(pokers, 5);
+		for (int i = 0; i < 5; i++){
+			for (int j = 0; j < 5; j++){
+				test[(pokers[i][j].poker_color - 1) * 13 + pokers[i][j].poker_value - 1]++;
+			}
+		}
+		for (int i = 0; i < 52; i++){
+			EXPECT_TRUE(test[i] < 2);
+		}
 	}
 
 	void testDNPokerCompare(){
@@ -731,8 +792,8 @@ TEST_F(CDNPokerTest, testShuffle) {
 	testShuffle();
 }
 
-TEST_F(CDNPokerTest, testDealPokers) {
-	testDealPokers();
+TEST_F(CDNPokerTest, testDNDeal) {
+	testDNDeal();
 }
 
 TEST_F(CDNPokerTest, testFindMaxPoker) {
@@ -771,8 +832,21 @@ TEST_F(CDNPokerTest, testFindCow) {
 	testFindCow();
 }
 
+TEST_F(CDNPokerTest, testHasCow_CDNPokers) {
+	testHasCow_CDNPokers();
+}
+
+TEST_F(CDNPokerTest, testFindCow_CDNPokers) {
+	testFindCow_CDNPokers();
+}
+
+
 TEST_F(CDNPokerTest, testChangeDNPokerJQK) {
 	testChangeDNPokerJQK();
+}
+
+TEST_F(CDNPokerTest, testDealPokers) {
+	testDealPokers();
 }
 
 TEST_F(CDNPokerTest, testDNPokerCompare) {
