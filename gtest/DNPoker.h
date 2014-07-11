@@ -6,6 +6,7 @@
 #define _CRT_SECURE_NO_DEPRECATE
 
 #include <string>
+#include  <string.h>
 
 
 #define MAX_DNPOKER_COUNT 52	// 去掉大小王 Joker
@@ -23,6 +24,9 @@
 #define uint64 unsigned long long
 
 #define BYTE unsigned char
+
+ bool pokerValueIndexPairComparator(const std::pair<int32, int32>& a, const std::pair<int32, int32>& b);
+ int pokerIndexComparator(const void *, const void *);
 
 enum DNPokerColor
 {

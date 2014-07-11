@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
-#include "DNPoker.h"
+#include  <gtest/gtest.h>
+#include  "DNPoker.h"
+#include <string.h>
 
 class DNPokerTest : public ::testing::Test {
 protected:
@@ -223,7 +224,7 @@ protected:
 		cpoker.deal_position_ = -1;
 		EXPECT_FALSE(cpoker.DNDeal(poker));
 		cpoker.deal_position_ = 50;
-		EXPECT_FALSE(cpoker.DNDeal(poker));
+		EXPECT_FALSE(cpoker.DNDeal(poker)); 
 		cpoker.deal_position_ = 0;
 		cpoker.DNDeal(poker);
 		for (int i = 0; i < 5; i++)
@@ -263,11 +264,11 @@ protected:
 		struct DNPokers pokers_a, pokers_b;
 		//测试两者都没有牛
 		pokers_a.poker[0].poker_color = 2;
-		pokers_a.poker[0].poker_value = 3;
+		pokers_a.poker[0].poker_value = 5;
 		pokers_a.poker[1].poker_color = 3;
 		pokers_a.poker[1].poker_value = 5;
 		pokers_a.poker[2].poker_color = 1;
-		pokers_a.poker[2].poker_value = 2;
+		pokers_a.poker[2].poker_value = 1;
 		pokers_a.poker[3].poker_color = 4;
 		pokers_a.poker[3].poker_value = 9;
 		pokers_a.poker[4].poker_color = 4;
@@ -283,14 +284,16 @@ protected:
 		pokers_b.poker[3].poker_value = 5;
 		pokers_b.poker[4].poker_color = 4;
 		pokers_b.poker[4].poker_value = 6;
-		EXPECT_FALSE(cpoker.ComparePokers(pokers_a, pokers_b));
-		//一者为5小牛
+		EXPECT_TRUE(cpoker.ComparePokers(pokers_a, pokers_b));
+		pokers_a.Reset();
+		pokers_b.Reset();
+		//左边有牛，右边没牛
 		pokers_a.poker[0].poker_color = 2;
 		pokers_a.poker[0].poker_value = 1;
 		pokers_a.poker[1].poker_color = 3;
 		pokers_a.poker[1].poker_value = 2;
 		pokers_a.poker[2].poker_color = 1;
-		pokers_a.poker[2].poker_value = 2;
+		pokers_a.poker[2].poker_value = 7;
 		pokers_a.poker[3].poker_color = 4;
 		pokers_a.poker[3].poker_value = 3;
 		pokers_a.poker[4].poker_color = 4;
@@ -307,35 +310,13 @@ protected:
 		pokers_b.poker[4].poker_color = 4;
 		pokers_b.poker[4].poker_value = 6;
 		EXPECT_FALSE(cpoker.ComparePokers(pokers_a, pokers_b));
-		//一者为4炸
-		pokers_a.poker[0].poker_color = 2;
-		pokers_a.poker[0].poker_value = 1;
-		pokers_a.poker[1].poker_color = 3;
-		pokers_a.poker[1].poker_value = 1;
-		pokers_a.poker[2].poker_color = 1;
-		pokers_a.poker[2].poker_value = 1;
-		pokers_a.poker[3].poker_color = 1;
-		pokers_a.poker[3].poker_value = 3;
-		pokers_a.poker[4].poker_color = 4;
-		pokers_a.poker[4].poker_value = 1;
-
-		pokers_b.poker[0].poker_color = 2;
-		pokers_b.poker[0].poker_value = 3;
-		pokers_b.poker[1].poker_color = 1;
-		pokers_b.poker[1].poker_value = 10;
-		pokers_b.poker[2].poker_color = 1;
-		pokers_b.poker[2].poker_value = 13;
-		pokers_b.poker[3].poker_color = 3;
-		pokers_b.poker[3].poker_value = 5;
-		pokers_b.poker[4].poker_color = 4;
-		pokers_b.poker[4].poker_value = 6;
-		EXPECT_FALSE(cpoker.ComparePokers(pokers_a, pokers_b));
-
-		//测试一者有牛，一者没牛
+		pokers_a.Reset();
+		pokers_b.Reset();
+		//测试左边没牛，右边有牛
 		pokers_a.poker[0].poker_color = 2;
 		pokers_a.poker[0].poker_value = 3;
 		pokers_a.poker[1].poker_color = 3;
-		pokers_a.poker[1].poker_value = 5;
+		pokers_a.poker[1].poker_value = 1;
 		pokers_a.poker[2].poker_color = 1;
 		pokers_a.poker[2].poker_value = 2;
 		pokers_a.poker[3].poker_color = 4;
@@ -352,31 +333,9 @@ protected:
 		pokers_b.poker[3].poker_color = 3;
 		pokers_b.poker[3].poker_value = 5;
 		pokers_b.poker[4].poker_color = 4;
-		pokers_b.poker[4].poker_value = 6;
-		EXPECT_FALSE(cpoker.ComparePokers(pokers_a, pokers_b));
-		//测试两者都有牛
-		pokers_a.poker[0].poker_color = 2;
-		pokers_a.poker[0].poker_value = 3;
-		pokers_a.poker[1].poker_color = 3;
-		pokers_a.poker[1].poker_value = 5;
-		pokers_a.poker[2].poker_color = 1;
-		pokers_a.poker[2].poker_value = 2;
-		pokers_a.poker[3].poker_color = 4;
-		pokers_a.poker[3].poker_value = 9;
-		pokers_a.poker[4].poker_color = 4;
-		pokers_a.poker[4].poker_value = 8;
-
-		pokers_b.poker[0].poker_color = 2;
-		pokers_b.poker[0].poker_value = 3;
-		pokers_b.poker[1].poker_color = 1;
-		pokers_b.poker[1].poker_value = 10;
-		pokers_b.poker[2].poker_color = 1;
-		pokers_b.poker[2].poker_value = 13;
-		pokers_b.poker[3].poker_color = 3;
-		pokers_b.poker[3].poker_value = 5;
-		pokers_b.poker[4].poker_color = 4;
-		pokers_b.poker[4].poker_value = 12;
-		EXPECT_FALSE(cpoker.ComparePokers(pokers_a, pokers_b));
+		pokers_b.poker[4].poker_value = 10;
+		EXPECT_TRUE(cpoker.ComparePokers(pokers_a, pokers_b));
+	
 		
 	}
 
@@ -389,17 +348,59 @@ protected:
 
 	void testDN_Switch(){
 		CDNPoker cpoker;
+		EXPECT_EQ(CDNPoker::MEI_NIU, cpoker.DN_Switch(0));
 		EXPECT_EQ(CDNPoker::NIU_DING, cpoker.DN_Switch(1));
+		EXPECT_EQ(CDNPoker::NIU_ER, cpoker.DN_Switch(2));
+		EXPECT_EQ(CDNPoker::NIU_SAN, cpoker.DN_Switch(3));
+		EXPECT_EQ(CDNPoker::NIU_SI, cpoker.DN_Switch(4));
+		EXPECT_EQ(CDNPoker::NIU_WU, cpoker.DN_Switch(5));
+		EXPECT_EQ(CDNPoker::NIU_LIU, cpoker.DN_Switch(6));
+		EXPECT_EQ(CDNPoker::NIU_QI, cpoker.DN_Switch(7));
+		EXPECT_EQ(CDNPoker::NIU_BA, cpoker.DN_Switch(8));
+		EXPECT_EQ(CDNPoker::NIU_JIU, cpoker.DN_Switch(9));
+		EXPECT_EQ(CDNPoker::NIU_NIU, cpoker.DN_Switch(10));
+		EXPECT_EQ(CDNPoker::SI_ZHA, cpoker.DN_Switch(11));
+		EXPECT_EQ(CDNPoker::WU_HUA_NIU, cpoker.DN_Switch(12));
+		EXPECT_EQ(CDNPoker::WU_XIAO_NIU, cpoker.DN_Switch(13));
+		EXPECT_EQ(CDNPoker::MEI_NIU, cpoker.DN_Switch(14));
 	}
 
 	void testGetDNType(){
 		CDNPoker cpoker;
+		EXPECT_EQ("没牛", cpoker.GetDNType(0));
+		EXPECT_EQ("牛丁", cpoker.GetDNType(1));
 		EXPECT_EQ("牛二", cpoker.GetDNType(2));
+		EXPECT_EQ("牛三", cpoker.GetDNType(3));
+		EXPECT_EQ("牛四", cpoker.GetDNType(4));
+		EXPECT_EQ("牛五", cpoker.GetDNType(5));
+		EXPECT_EQ("牛六", cpoker.GetDNType(6));
+		EXPECT_EQ("牛七", cpoker.GetDNType(7));
+		EXPECT_EQ("牛八", cpoker.GetDNType(8));
+		EXPECT_EQ("牛九", cpoker.GetDNType(9));
+		EXPECT_EQ("牛牛", cpoker.GetDNType(10));
+		EXPECT_EQ("四炸", cpoker.GetDNType(11));
+		EXPECT_EQ("五花牛", cpoker.GetDNType(12));
+		EXPECT_EQ("五小牛", cpoker.GetDNType(13));
+		EXPECT_EQ("没牛", cpoker.GetDNType(14));
 	}
 
 	void testGetDNTypeToString(){
 		CDNPoker cpoker;
+		EXPECT_EQ("mei_niu", cpoker.GetDNTypeToString(CDNPoker::MEI_NIU));
+		EXPECT_EQ("niu_ding", cpoker.GetDNTypeToString(CDNPoker::NIU_DING));
+		EXPECT_EQ("niu_er", cpoker.GetDNTypeToString(CDNPoker::NIU_ER));
 		EXPECT_EQ("niu_san", cpoker.GetDNTypeToString(CDNPoker::NIU_SAN));
+		EXPECT_EQ("niu_si", cpoker.GetDNTypeToString(CDNPoker::NIU_SI));
+		EXPECT_EQ("niu_wu", cpoker.GetDNTypeToString(CDNPoker::NIU_WU));
+		EXPECT_EQ("niu_liu", cpoker.GetDNTypeToString(CDNPoker::NIU_LIU));
+		EXPECT_EQ("niu_qi", cpoker.GetDNTypeToString(CDNPoker::NIU_QI));
+		EXPECT_EQ("niu_ba", cpoker.GetDNTypeToString(CDNPoker::NIU_BA));
+		EXPECT_EQ("niu_jiu", cpoker.GetDNTypeToString(CDNPoker::NIU_JIU));
+		EXPECT_EQ("niu_niu", cpoker.GetDNTypeToString(CDNPoker::NIU_NIU));
+		EXPECT_EQ("si_zha", cpoker.GetDNTypeToString(CDNPoker::SI_ZHA));
+		EXPECT_EQ("wu_hua_niu", cpoker.GetDNTypeToString(CDNPoker::WU_HUA_NIU));
+		EXPECT_EQ("wu_xiao_niu", cpoker.GetDNTypeToString(CDNPoker::WU_XIAO_NIU));
+		EXPECT_EQ("mei_niu", cpoker.GetDNTypeToString(CDNPoker::MEI_NIU));
 	}
 
 	void testHasCow(){
@@ -520,6 +521,7 @@ protected:
 		int32 niuPokerIndex[5] = { -1, -1, -1, -1, -1 };
 		int32 otherPokerIndex[2] = { -1, -1 };
 		int test[5];
+		//其他牛
 		for (int i = 0; i < 5; i++)
 			test[i] = 0;
 		poker[0].poker_color = 2;
@@ -532,7 +534,6 @@ protected:
 		poker[3].poker_value = 9;
 		poker[4].poker_color = 4;
 		poker[4].poker_value = 7;
-
 		cpoker.FindCow(poker, niuPokerIndex, otherPokerIndex);
 		for (int i = 0; i < 3; i++)
 			test[niuPokerIndex[i]]++;
@@ -540,6 +541,86 @@ protected:
 			test[otherPokerIndex[i]]++;
 		for (int i = 0; i < 5; i++)
 			EXPECT_EQ(1, test[i]);
+		//牛牛
+		for (int i = 0; i < 5; i++)
+			test[i] = 0;
+		poker[0].poker_color = 2;
+		poker[0].poker_value = 13;
+		poker[1].poker_color = 3;
+		poker[1].poker_value = 11;
+		poker[2].poker_color = 1;
+		poker[2].poker_value = 12;
+		poker[3].poker_color = 4;
+		poker[3].poker_value = 3;
+		poker[4].poker_color = 4;
+		poker[4].poker_value = 7;
+		EXPECT_EQ(CDNPoker::NIU_NIU, cpoker.FindCow(poker, niuPokerIndex, otherPokerIndex));
+		for (int i = 0; i < 3; i++)
+			test[niuPokerIndex[i]]++;
+		for (int i = 0; i < 2; i++)
+			test[otherPokerIndex[i]]++;
+		for (int i = 0; i < 5; i++)
+			EXPECT_EQ(1, test[i]);
+		
+		//五小牛
+		for (int i = 0; i < 5; i++)
+			test[i] = 0;
+		poker[0].poker_color = 2;
+		poker[0].poker_value = 1;
+		poker[1].poker_color = 3;
+		poker[1].poker_value = 1;
+		poker[2].poker_color = 1;
+		poker[2].poker_value = 1;
+		poker[3].poker_color = 4;
+		poker[3].poker_value = 2;
+		poker[4].poker_color = 4;
+		poker[4].poker_value = 2;
+		EXPECT_EQ(CDNPoker::WU_XIAO_NIU, cpoker.FindCow(poker, niuPokerIndex, otherPokerIndex));
+		
+		//五花牛
+		for (int i = 0; i < 5; i++)
+			test[i] = 0;
+		poker[0].poker_color = 2;
+		poker[0].poker_value = 13;
+		poker[1].poker_color = 3;
+		poker[1].poker_value = 11;
+		poker[2].poker_color = 1;
+		poker[2].poker_value = 12;
+		poker[3].poker_color = 4;
+		poker[3].poker_value = 13;
+		poker[4].poker_color = 4;
+		poker[4].poker_value = 11;
+		EXPECT_EQ(CDNPoker::WU_HUA_NIU, cpoker.FindCow(poker, niuPokerIndex, otherPokerIndex));
+		
+		//四炸
+		for (int i = 0; i < 5; i++)
+			test[i] = 0;
+		poker[0].poker_color = 2;
+		poker[0].poker_value = 6;
+		poker[1].poker_color = 3;
+		poker[1].poker_value = 6;
+		poker[2].poker_color = 1;
+		poker[2].poker_value = 6;
+		poker[3].poker_color = 4;
+		poker[3].poker_value = 6;
+		poker[4].poker_color = 4;
+		poker[4].poker_value = 7;
+		EXPECT_EQ(CDNPoker::SI_ZHA, cpoker.FindCow(poker, niuPokerIndex, otherPokerIndex));
+		
+		//没牛
+		for (int i = 0; i < 5; i++)
+			test[i] = 0;
+		poker[0].poker_color = 2;
+		poker[0].poker_value = 13;
+		poker[1].poker_color = 3;
+		poker[1].poker_value = 11;
+		poker[2].poker_color = 1;
+		poker[2].poker_value = 5;
+		poker[3].poker_color = 4;
+		poker[3].poker_value = 3;
+		poker[4].poker_color = 4;
+		poker[4].poker_value = 4;
+		EXPECT_EQ(CDNPoker::MEI_NIU, cpoker.FindCow(poker, niuPokerIndex, otherPokerIndex));
 	}
 
 	void testHasCow_CDNPokers(){
@@ -577,17 +658,12 @@ protected:
 			EXPECT_EQ(pokers.niu_poker_index[i], niuPokerIndex[i]);
 		}
 		EXPECT_EQ(pokers.max_poker, cpoker.FindMaxPoker(pokers.poker));
-	/*	int32 *pniuPokerIndex = NULL;
+		int32 *pniuPokerIndex = NULL;
 		int32 *potherPokerIndex = NULL;
 		
 		cpoker.FindCow(pokers, pniuPokerIndex, potherPokerIndex);
-		for (int i = 0; i < 5; i++){
-			EXPECT_EQ(-1, pniuPokerIndex[i]);
-		}
-		for (int i = 0; i < 2; i++){
-			EXPECT_EQ(-1, potherPokerIndex[i]);
-		}
-		*/
+		
+		
 	}
 
 	void testChangeDNPokerJQK(){
@@ -625,10 +701,14 @@ protected:
 		poker2.poker_color = 2;
 		poker2.poker_value = 5;
 		EXPECT_EQ(0, cpoker.DNPokerCompare(poker1, poker2));
+		poker2.poker_color = 1;
+		EXPECT_EQ(1, cpoker.DNPokerCompare(poker1, poker2));
 		poker2.poker_color = 3;
 		EXPECT_EQ(-1, cpoker.DNPokerCompare(poker1, poker2));
 		poker1.poker_value = 9;
 		EXPECT_EQ(1, cpoker.DNPokerCompare(poker1, poker2));
+		poker1.poker_value = 2;
+		EXPECT_EQ(-1, cpoker.DNPokerCompare(poker1, poker2));
 	}
 };
 
@@ -728,6 +808,30 @@ protected:
 		EXPECT_FALSE(pokers.IsTypeIdentified());
 	}
 };
+
+void testpokerValueIndexPairComparator(){
+	std::pair<int32, int32> a = { 2, 3 };
+	std::pair<int32, int32> b = { 4, 5 };
+	EXPECT_TRUE(pokerValueIndexPairComparator(a, b));
+}
+
+void testpokerIndexComparator(){
+	int m = 1;
+	int n = 2;
+	void *a = (void*)&m;
+	void *b = (void*)&n;
+	EXPECT_EQ(-1, pokerIndexComparator(a, b));
+	
+}
+
+TEST(main, testpokerValueIndexPairComparator){
+	testpokerValueIndexPairComparator();
+}
+
+TEST(main, testpokerIndexComparator){
+	testpokerIndexComparator();
+}
+
 
 TEST_F(DNPokerTest, testConstructor) {
 	testConstructor();

@@ -1,14 +1,15 @@
-#include "DNPoker.h"
-#include <assert.h>
-#include <stdio.h>
-#include <vector>
-#include<algorithm>
+#include  "DNPoker.h"
+#include  <assert.h>
+#include  <stdio.h>
+#include  <vector>
+#include  <algorithm>
+#include  <string.h>
 
-static bool pokerValueIndexPairComparator(const std::pair<int32, int32> &a, const std::pair<int32, int32> &b) {
+bool pokerValueIndexPairComparator(const std::pair<int32, int32> &a, const std::pair<int32, int32> &b) {
 	return a.first < b.first;
 }
 
-static int pokerIndexComparator(const void *a, const void *b) {
+int pokerIndexComparator(const void *a, const void *b) {
 	const int32 *ia = static_cast<const int*>(a);
 	const int32 *ib = static_cast<const int*>(b);
 	return *ia - *ib;
@@ -667,12 +668,10 @@ int32 CDNPoker::DNPokerCompare(DNPoker& pokerA,DNPoker& pokerB)
 	{
 		return 1;
 	}
-	else if (pokerA.poker_value < pokerB.poker_value)
+	else
 	{
 		return -1;
 	}
-
-	return 0;
 }
 
 bool CDNPoker::DealPokers(DNPoker * poker[], int32 playerNumber) 
